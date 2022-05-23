@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ae714dde-cdaa-4bf0-8402-3d3369ff9d14" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/currencies.html" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DjangoCrypto/settings.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DjangoCrypto/urls.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CryptoPeek/views.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CryptoPeek/urls.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/cssdetails1.css" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/csshomestyle.css" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/home.html" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CryptoPeek/tests.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CryptoPeek/models.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProjectId" id="2794szAxb6108JOE6gl8t3YTm9E" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="sqlite" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Semestr4/bazy/DjangoMongoDBPortProject/db.sqlite3" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\domig\PwJP22\DjangoCrypto\CryptoPeek\static\CryptoPeek\images" />
+      <recent name="C:\Users\domig\PwJP22\DjangoCrypto\CryptoPeek\static\CryptoPeek" />
+      <recent name="C:\Users\domig\PwJP22\DjangoCrypto\CryptoPeek\templates\CryptoPeek" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\domig\PwJP22\DjangoCrypto\CryptoPeek\static\CryptoPeek" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Django Server.DjangoCrypto">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DjangoCrypto" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Semestr4/MOwNiT" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$USER_HOME$/Semestr4/MOwNiT/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="DjangoCrypto" type="Python.DjangoServer" factoryName="Django server">
+      <module name="DjangoCrypto" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\domig\AppData\Local\Programs\Python\Python39\python.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ae714dde-cdaa-4bf0-8402-3d3369ff9d14" name="Changes" comment="" />
+      <created>1648719179057</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1648719179057</updated>
+      <workItem from="1648719198544" duration="12779000" />
+      <workItem from="1648734053945" duration="477000" />
+      <workItem from="1648735051963" duration="705000" />
+      <workItem from="1648742266041" duration="1045000" />
+      <workItem from="1648748211606" duration="3113000" />
+      <workItem from="1648805286503" duration="1691000" />
+      <workItem from="1648810325772" duration="1647000" />
+      <workItem from="1648813357001" duration="101000" />
+      <workItem from="1648851594586" duration="197000" />
+      <workItem from="1649167298478" duration="65000" />
+      <workItem from="1650628926513" duration="221000" />
+      <workItem from="1650744886976" duration="15000" />
+      <workItem from="1650745250461" duration="369000" />
+      <workItem from="1650801717638" duration="1309000" />
+      <workItem from="1650977671073" duration="12000" />
+      <workItem from="1651145534025" duration="18253000" />
+      <workItem from="1651167219611" duration="4198000" />
+      <workItem from="1651179132520" duration="201000" />
+      <workItem from="1651224048766" duration="10205000" />
+      <workItem from="1651237975045" duration="108000" />
+      <workItem from="1651259041710" duration="79000" />
+      <workItem from="1651263480924" duration="226000" />
+      <workItem from="1651265101990" duration="1395000" />
+      <workItem from="1651848616172" duration="131000" />
+      <workItem from="1651848811577" duration="138000" />
+      <workItem from="1651849040652" duration="389000" />
+      <workItem from="1651849532620" duration="23000" />
+      <workItem from="1651850798445" duration="1028000" />
+      <workItem from="1651918170521" duration="1677000" />
+      <workItem from="1651925386933" duration="6194000" />
+      <workItem from="1651956010164" duration="675000" />
+      <workItem from="1651961728125" duration="651000" />
+      <workItem from="1652005666242" duration="5347000" />
+      <workItem from="1652031449466" duration="1061000" />
+      <workItem from="1652085191482" duration="1226000" />
+      <workItem from="1652092420577" duration="252000" />
+      <workItem from="1652351873851" duration="22533000" />
+      <workItem from="1652430720580" duration="587000" />
+      <workItem from="1652439249154" duration="3620000" />
+      <workItem from="1652463930327" duration="1365000" />
+      <workItem from="1652469888665" duration="1515000" />
+      <workItem from="1652475246203" duration="39000" />
+      <workItem from="1652477252026" duration="662000" />
+      <workItem from="1652516596332" duration="3388000" />
+      <workItem from="1653065905037" duration="7616000" />
+      <workItem from="1653159371215" duration="3801000" />
+      <workItem from="1653175148065" duration="4354000" />
+      <workItem from="1653210933235" duration="4332000" />
+      <workItem from="1653219862186" duration="4992000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/DjangoCrypto$main.coverage" NAME="main Coverage Results" MODIFIED="1652367906930" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/Semestr4/MOwNiT" />
+  </component>
+</project>

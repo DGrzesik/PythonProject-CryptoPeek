@@ -1,0 +1,60 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static '/CryptoPeek/cssdetails1.css' %}">
+<nav class="navbar">
+    <a id="curr" href="{% url 'CryptoPeek:home' %}"><div class="logo">CryptoPeek</div></a>
+    <div class="options">
+        <a id="curr" href="{% url 'CryptoPeek:home' %}"><div id="opt">Home</div></a>
+        <a id="curr" href="{% url 'CryptoPeek:currencies' %}"><div id="opt">Currencies</div></a>
+        <a id="curr" href="{% url 'CryptoPeek:favourite' %}"><div id="opt">Favourite</div></a>
+        <a id="curr" href="{% url 'CryptoPeek:account' %}"><div id="opt">
+            {% if user.is_authenticated %}
+                {{ user.username }}
+            {% else %}
+                Log in
+            {% endif %}
+        </div></a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="actions">
+{#            <a id="link" href="{% url 'CryptoPeek:following' crypto_id=apidata.id following=liked %}">#}
+{#                <div class="fav" >🤍</div>#}
+{#            </a>#}
+        <form action='' method="POST">
+            {% csrf_token %}
+            {% if not liked %}
+                <input class='fav' id="nameinput" type="submit" name="like" value="🤍">
+            {% else %}
+                <input class='fav' id="nameinput" type="submit" name="like" value="❤️">
+            {% endif %}
+        </form>
+{#            <a id="link" href="{% url 'CryptoPeek:following' crypto_id=apidata.id following=liked %}">#}
+{#                <div class="fav" >❤️</div>#}
+{#            </a>#}
+        <a id="link" href="{% url 'CryptoPeek:currencies' %}"><div class="return">Return to currencies</div></a>
+    </div>
+    <div class="name">{{ apidata.name }}</div>
+    <div class="valueinfo">
+        <div class="image">
+            {% autoescape off %}
+                {{ plot_div }}
+            {% endautoescape %}
+        </div>
+        <div class="valuetable">
+            {% for crypto in apidataall %}
+                {% if crypto.id == apidata.id %}
+                    <div class="numberstop" id="currprice">Current price: {{ crypto.current_price}} USD</div>
+                    <div class="numbers" id="pricechange24h">Price change(24h): {{ crypto.price_change_24h }} USD ({{ crypto.price_change_percentage_24h }}%)</div>
+                    <div class="numbers" id="marketcap">Market cap: {{ crypto.market_cap }}</div>
+                    <div class="numbers" id="highest">Highest price: {{ crypto.high_24h }} USD</div>
+                    <div class="numbers" id="lowest">Lowest price: {{ crypto.low_24h }} USD</div>
+                    <div class="numbers"  id="circulating">Circulating: {{ crypto.circulating_supply }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="description"><div class="header">All about {{ apidata.name }}</div>{{apidata.description.en}}</div>
+</div>

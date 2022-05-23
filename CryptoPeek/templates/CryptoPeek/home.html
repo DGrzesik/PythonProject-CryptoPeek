@@ -1,0 +1,65 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static '/CryptoPeek/csshomestyle.css' %}">
+<div class="navbar">
+    <a id="curr" href="{% url 'CryptoPeek:home' %}"><div class="logo">CryptoPeek</div></a>
+    <div class="options">
+        <a id="curr" href="{% url 'CryptoPeek:home' %}"><div id="currentopt">Home</div></a>
+        <a id="curr" href="{% url 'CryptoPeek:currencies' %}"><div id="opt">Currencies</div></a>
+        <a id="curr" href="{% url 'CryptoPeek:favourite' %}"><div id="opt">Favourite</div></a>
+        <a id="curr" href="{% url 'CryptoPeek:account' %}"><div id="opt">
+            {% if user.is_authenticated %}
+                {{ user.username }}
+            {% else %}
+                Log in
+            {% endif %}
+        </div></a>
+    </div>
+
+</div>
+<div class="container">
+    <div class="slogan">
+        <div id="text">
+            Your dad's favourite place to satisfy his gambling addiction :D
+        </div>
+    </div>
+       <div class="top">
+           <a id="link" href="{% url 'CryptoPeek:detail' highest_data.id %}">
+               {% for crypto in apidata %}
+                   {% if crypto.id == highest_data.id %}
+                       <div class="name">
+                       <div class="nohoveron">Highest profit in last 24h: {{ highest_data.name }} ({{crypto.price_change_percentage_24h}}%)</div>
+                        <div class="hoveron">Dowiedz się więcej!</div>
+                       </div>
+                   {% endif %}
+               {% endfor %}
+           </a>
+           <div class="graph">
+                {% autoescape off %}
+                    {{ plot_div_h }}
+                {% endautoescape %}
+           </div>
+       </div>
+</div>
+<div class="container">
+    <div class="slogan">
+        <div id="text">
+            I don't know why does this interest you, but here you go nerd...
+        </div>
+    </div>
+       <div class="top">
+       <a id="link" href="{% url 'CryptoPeek:detail' lowest_data.id %}">
+           {% for crypto in apidata %}
+               {% if crypto.id == lowest_data.id %}
+                    <div class="name">
+                        <div class="nohoveron">Lowest profit in last 24h: {{ lowest_data.name }} ({{crypto.price_change_percentage_24h}}%)</div>
+                        <div class="hoveron">Dowiedz się więcej!</div>
+                    </div>
+               {% endif %}
+           {% endfor %}
+       </a>
+                <div class="graph">
+                {% autoescape off %}
+                    {{ plot_div_l }}
+                {% endautoescape %}</div>
+       </div>
+</div>

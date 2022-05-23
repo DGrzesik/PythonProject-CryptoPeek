@@ -1,0 +1,75 @@
+<!doctype html>
+{% load static %}
+{% load CryptoPeek_tags %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="{% static '/CryptoPeek/currenciesstyle1.css' %}">
+<style>
+        * {
+            color: black;
+        }
+
+        img {
+            height: 4rem;
+            width: 4rem;
+        }
+</style>
+
+<nav class="navbar">
+    <a id="curr" href="{% url 'CryptoPeek:home' %}"><div class="logo">CryptoPeek</div></a>
+    <div class="options">
+        <a id="curr" href="{% url 'CryptoPeek:home' %}"><div id="opt">Home</div></a>
+        <a id="curr" href="{% url 'CryptoPeek:currencies' %}"><div id="currentopt">Currencies</div></a>
+        <a id="curr" href="{% url 'CryptoPeek:favourite' %}"><div id="opt">Favourite</div></a>
+        <a id="curr" href="{% url 'CryptoPeek:account' %}"><div id="opt">
+            {% if user.is_authenticated %}
+                {{ user.username }}
+            {% else %}
+                Log in
+            {% endif %}
+        </div></a>
+    </div>
+</nav>
+
+<div class="search">
+            <form action='' method="POST">
+                {% csrf_token %}
+                {{ form }}
+                <input id="nameinput" type="submit" value="Wyszukaj">
+            </form>
+</div>
+<section>
+        <div class="container py-5">
+            <div class="table-responsive text-white">
+                <table class="table table-striped text-center table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Crypto Currency</th>
+                            <th scope="col">Current Price USD</th>
+                            <th scope="col">Price change (24h)</th>
+                            <th scope="col">Market Cap</th>
+                            <th scope="col">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                        {% for i in apidata %}
+                        <tr>
+                            <td><img src="{{i.image}}" alt="image"> <h5>{{i.name}}/{{i.symbol}} </h5></td>
+                            <td><h5 style="height: 90px;line-height: 90px">${{i.current_price}}</h5></td>
+                                {% if i.price_change_24h > 0 %}
+                                    <td><h5 style="display: inline" >$</h5><h5 style = "color:lightgreen;height: 90px;line-height: 90px; display: inline" >{{i.price_change_24h }}</h5></td>
+                                {% else %}
+                                    <td><h5 style="display: inline" >$</h5><h5 style = "color:indianred;height: 90px;line-height: 90px; display: inline" >{{i.price_change_24h }}</h5></td>
+                                {% endif %}
+                            <td><h5 style="height: 90px;line-height: 90px">${{i.market_cap | round_values}}</h5></td>
+                            <td><a id="link" href="{% url 'CryptoPeek:detail' i.id %}"><h5 class="more">More</h5></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</section>
+
