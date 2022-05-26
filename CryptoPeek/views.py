@@ -70,6 +70,11 @@ def favourite(request):
                 action = request.POST['action']
             else:
                 action = False
+            if request.POST['action'] == 'Log out':
+                logout(request)
+                return redirect('/cryptopeek/favourite/login/')
+
+
             apidata = get(
                 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
             if action == "Wyszukaj":
@@ -115,6 +120,10 @@ def favourite(request):
 
 
 def home(request):
+    if request.method == 'POST':
+        if request.POST['action'] == 'Log out':
+            logout(request)
+            return redirect('/cryptopeek/home/')
     apidata = get(
         'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
     highest_profit = -math.inf
@@ -160,6 +169,9 @@ def index(request):
     apidata = get(
         'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
     if request.method == 'POST':
+        if request.POST['action'] == 'Log out':
+            logout(request)
+            return redirect('/cryptopeek/currencies/')
         apidata = get(
             'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
         form = CryptoListForm(request.POST)
@@ -293,12 +305,24 @@ def detail(request, crypto_id):
         if crypto_id in this_users_fav:
             liked = 1
         if request.method == 'POST':
-            if request.POST['like'] == '🤍':
+            if 'action' in request.POST:
+                action = request.POST['action']
+            else:
+                action = False
+            if 'like' in request.POST:
+                like = request.POST['like']
+            else:
+                like = False
+            if like == '🤍':
                 all_favourites.update_one({'username': request.user.username}, {"$push": {'favourites': crypto_id}})
                 liked = 1
-            if request.POST['like'] == "❤️":
+            if like == "❤️":
                 all_favourites.update_one({'username': request.user.username}, {"$pull": {'favourites': crypto_id}})
                 liked = 0
+            if action == 'Log out':
+                logout(request)
+                return render(request, 'CryptoPeek/details.html',
+                              {'apidata': apidata, 'plot_div': plot_div, 'apidataall': apidataall, "liked": 0})
     else:
         if request.method == 'POST':
             return redirect('/cryptopeek/login/')

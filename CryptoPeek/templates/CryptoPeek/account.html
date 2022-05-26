@@ -1,18 +1,11 @@
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static '/CryptoPeek/account.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static '/CryptoPeek/account1.css' %}">
 <div class="navbar">
     <a id="curr" href="{% url 'CryptoPeek:home' %}"><div class="logo">CryptoPeek</div></a>
     <div class="options">
         <a id="curr" href="{% url 'CryptoPeek:home' %}"><div id="opt">Home</div></a>
         <a id="curr" href="{% url 'CryptoPeek:currencies' %}"><div id="opt">Currencies</div></a>
         <a id="curr" href="{% url 'CryptoPeek:favourite' %}"><div id="opt">Favourite</div></a>
-        <a id="curr" href="{% url 'CryptoPeek:account' %}"><div id="currentopt">
-            {% if user.is_authenticated %}
-                {{ user.username }}
-            {% else %}
-                Log in
-            {% endif %}
-        </div></a>
     </div>
 </div>
 <div class="slogan">

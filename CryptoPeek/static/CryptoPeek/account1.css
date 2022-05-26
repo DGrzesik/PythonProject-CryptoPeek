@@ -36,8 +36,8 @@ body{
 
 #opt{
     position: relative;
-    width: 100px;
     color: white;
+    margin-left: 10px;
     display: inline-block;
     text-align: center;
     font-size: 20px;

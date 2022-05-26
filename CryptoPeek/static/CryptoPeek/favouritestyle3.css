@@ -33,7 +33,16 @@ body{
 
 #opt{
     position: relative;
-    width: 100px;
+    color: white;
+    margin-left: 10px;
+    display: inline-block;
+    text-align: center;
+    font-size: 20px;
+    padding: 3px;
+    transition: 1s;
+}
+#optnohov{
+    position: relative;
     color: white;
     display: inline-block;
     text-align: center;
@@ -53,7 +62,7 @@ body{
 }
 #currentopt{
     position: relative;
-    width: 150px;
+    margin-left: 10px;
     color: white;
     display: inline-block;
     text-align: center;
@@ -151,6 +160,15 @@ ul{
 .fav:hover{
     transition: 0.3s;
     transform: scale(1.1);
+}
+#nameinput{
+    border: none;
+    background-color: transparent;
+    color: white;
+}
+#nameinput:hover{
+     color: #a6a6a6;
+    transition: 0.5s;
 }
 .more{
     transition: 0.3s;
