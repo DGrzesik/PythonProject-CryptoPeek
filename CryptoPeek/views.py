@@ -25,7 +25,7 @@ def register(request):
                 password = form.cleaned_data['password1']
                 user = authenticate(username=user.username, password=password)
                 login(request, user)
-                all_favourites.insert_one({"username":user.username,"favourites":[]})
+                all_favourites.insert_one({"username": user.username, "favourites": []})
                 return redirect('/cryptopeek/currencies/')
     else:
         form = SignUpForm()
@@ -74,11 +74,9 @@ def favourite(request):
                 logout(request)
                 return redirect('/cryptopeek/favourite/login/')
 
-
-            apidata = get(
-                'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
             if action == "Wyszukaj":
-
+                apidata = get(
+                    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
                 if form.is_valid():
                     name = form.cleaned_data['name']
                     from_price = form.cleaned_data['from_price']
@@ -169,43 +167,48 @@ def index(request):
     apidata = get(
         'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
     if request.method == 'POST':
-        if request.POST['action'] == 'Log out':
-            logout(request)
-            return redirect('/cryptopeek/currencies/')
-        apidata = get(
-            'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
         form = CryptoListForm(request.POST)
+        if 'action' in request.POST:
+            action = request.POST['action']
+        else:
+            action = False
 
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            from_price = form.cleaned_data['from_price']
-            to_price = form.cleaned_data['to_price']
-            sort_type = form.cleaned_data['sort']
-            input_dict = apidata
-            if from_price:
-                input_dict = [x for x in input_dict if x['current_price'] <= to_price]
-            if to_price:
-                input_dict = [x for x in input_dict if from_price <= x['current_price']]
-            if name:
-                input_dict = [x for x in input_dict if name.lower() in x['name'].lower()]
-            if sort_type == "A-Z":
-                input_dict.sort(key=lambda x: x["id"])
-            if sort_type == "Z-A":
-                input_dict.sort(key=lambda x: x["id"], reverse=True)
-            if sort_type == "ArrowDown":
-                input_dict.sort(key=lambda x: x["current_price"], reverse=True)
-            if sort_type == "ArrowUp":
-                input_dict.sort(key=lambda x: x["current_price"])
-            if sort_type == "ArrowUpMC":
-                input_dict.sort(key=lambda x: x["market_cap"])
-            if sort_type == "ArrowDownMC":
-                input_dict.sort(key=lambda x: x["market_cap"], reverse=True)
-            if sort_type == "ArrowUpPC":
-                input_dict.sort(key=lambda x: x["price_change_24h"])
-            if sort_type == "ArrowDownPC":
-                input_dict.sort(key=lambda x: x["price_change_24h"], reverse=True)
+        if action == 'Log out':
+            logout(request)
+        elif action == 'Wyszukaj':
+            apidata = get(
+                'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
 
-            return render(request, 'CryptoPeek/currencies.html', {'apidata': input_dict, 'form': form})
+            if form.is_valid():
+                name = form.cleaned_data['name']
+                from_price = form.cleaned_data['from_price']
+                to_price = form.cleaned_data['to_price']
+                sort_type = form.cleaned_data['sort']
+                input_dict = apidata
+                if from_price:
+                    input_dict = [x for x in input_dict if x['current_price'] >= from_price]
+                if to_price:
+                    input_dict = [x for x in input_dict if to_price >= x['current_price']]
+                if name:
+                    input_dict = [x for x in input_dict if name.lower() in x['name'].lower()]
+                if sort_type == "A-Z":
+                    input_dict.sort(key=lambda x: x["id"])
+                if sort_type == "Z-A":
+                    input_dict.sort(key=lambda x: x["id"], reverse=True)
+                if sort_type == "ArrowDown":
+                    input_dict.sort(key=lambda x: x["current_price"], reverse=True)
+                if sort_type == "ArrowUp":
+                    input_dict.sort(key=lambda x: x["current_price"])
+                if sort_type == "ArrowUpMC":
+                    input_dict.sort(key=lambda x: x["market_cap"])
+                if sort_type == "ArrowDownMC":
+                    input_dict.sort(key=lambda x: x["market_cap"], reverse=True)
+                if sort_type == "ArrowUpPC":
+                    input_dict.sort(key=lambda x: x["price_change_24h"])
+                if sort_type == "ArrowDownPC":
+                    input_dict.sort(key=lambda x: x["price_change_24h"], reverse=True)
+
+                return render(request, 'CryptoPeek/currencies.html', {'apidata': input_dict, 'form': form})
 
     else:
         form = CryptoListForm()

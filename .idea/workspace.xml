@@ -3,18 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="ae714dde-cdaa-4bf0-8402-3d3369ff9d14" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/account.css" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/account1.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/cssdetails1.css" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/cssdetails2.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/csshomestyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/home2.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/currenciesstyle1.css" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/currenciesstyle2.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/favouritestyle2.css" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/favouritestyle3.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/account.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/account.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/account1.css" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/account1.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/currencies.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/currencies.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/details.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/favourite.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/favourite.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CryptoPeek/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DjangoCrypto/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoCrypto/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -58,7 +52,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Semestr4/python/doubttestfiles" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -183,7 +177,11 @@
       <workItem from="1653495643015" duration="3751000" />
       <workItem from="1653503028086" duration="1714000" />
       <workItem from="1653571365111" duration="189000" />
-      <workItem from="1653573115082" duration="3173000" />
+      <workItem from="1653573115082" duration="4350000" />
+      <workItem from="1653638262827" duration="862000" />
+      <workItem from="1653649094981" duration="2194000" />
+      <workItem from="1653663403247" duration="656000" />
+      <workItem from="1653678927145" duration="1570000" />
     </task>
     <servers />
   </component>
