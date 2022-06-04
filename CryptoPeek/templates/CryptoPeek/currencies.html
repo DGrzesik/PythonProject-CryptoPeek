@@ -25,6 +25,7 @@
         {% endif %}
         <a id="curr" href="{% url 'CryptoPeek:home' %}"><div id="opt">Home</div></a>
         <a id="curr" href="{% url 'CryptoPeek:currencies' %}"><div id="currentopt">Currencies</div></a>
+        <a id="curr" href="{% url 'CryptoPeek:compare' %}"><div id="opt">Compare</div></a>
         <a id="curr" href="{% url 'CryptoPeek:favourite' %}"><div id="opt">Favourite</div></a>
         {% if user.is_authenticated %}
             <div id="opt">
@@ -43,7 +44,7 @@
             <form action='' method="POST">
                 {% csrf_token %}
                 {{ form }}
-                <input id="nameinput1" type="submit" name="action" value="Wyszukaj">
+                <input id="nameinput1" type="submit" name="action" value="Search">
             </form>
 </div>
 <section>
@@ -65,11 +66,11 @@
                             <td><img src="{{i.image}}" alt="image"> <h5>{{i.name}}/{{i.symbol}} </h5></td>
                             <td><h5 style="height: 90px;line-height: 90px">${{i.current_price}}</h5></td>
                                 {% if i.price_change_24h > 0 %}
-                                    <td><h5 style="display: inline" >$</h5><h5 style = "color:lightgreen;height: 90px;line-height: 90px; display: inline" >{{i.price_change_24h }}</h5></td>
+                                    <td><h5 style="display: inline" >$</h5><h5 style = "color:lightgreen;height: 90px;line-height: 90px; display: inline" >{{i.price_change_24h|round_small_values }}</h5></td>
                                 {% else %}
-                                    <td><h5 style="display: inline" >$</h5><h5 style = "color:indianred;height: 90px;line-height: 90px; display: inline" >{{i.price_change_24h }}</h5></td>
+                                    <td><h5 style="display: inline" >$</h5><h5 style = "color:indianred;height: 90px;line-height: 90px; display: inline" >{{i.price_change_24h|round_small_values }}</h5></td>
                                 {% endif %}
-                            <td><h5 style="height: 90px;line-height: 90px">${{i.market_cap | round_values}}</h5></td>
+                            <td><h5 style="height: 90px;line-height: 90px">${{i.market_cap | round_large_values}}</h5></td>
                             <td><a id="link" href="{% url 'CryptoPeek:detail' i.id %}"><h5 class="more">More</h5></a></td>
                         </tr>
                         {% endfor %}

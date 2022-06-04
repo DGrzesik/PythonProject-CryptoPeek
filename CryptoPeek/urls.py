@@ -5,6 +5,7 @@ urlpatterns = [
     path('',views.home,name="home"),
     path('cryptopeek/home/',views.home,name="home"),
     path('cryptopeek/favourite/',views.favourite,name="favourite"),
+    path('cryptopeek/compare/',views.compare,name="compare"),
     path('cryptopeek/favourite/login/',views.account,name="account"),
     path('cryptopeek/login/',views.account,name="account"),
     path('cryptopeek/delete/<str:crypto_id>/',views.delete,name="delete"),

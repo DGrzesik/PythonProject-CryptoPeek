@@ -2,11 +2,11 @@ import datetime
 import math
 from django.contrib.auth import login, authenticate, logout
 from plotly.offline import plot
-from plotly.graph_objs import Scatter, Figure, layout
+from plotly.graph_objs import Scatter, Figure, layout, Bar
 from django.shortcuts import render, redirect
 from requests import get
 import pymongo
-from .forms import CryptoListForm, SignUpForm, SignInForm
+from .forms import CryptoListForm, SignUpForm, SignInForm, CompareForm
 
 connection_string = 'mongodb+srv://dgrzesik:cryptopeekdgrzesik@cluster0.r6kad.mongodb.net/CryptoPeek?retryWrites=true&w=majority'
 my_client = pymongo.MongoClient(connection_string)
@@ -58,6 +58,62 @@ def delete(request, crypto_id):
     return redirect('/cryptopeek/favourite')
 
 
+def compare(request):
+    if request.method == 'POST':
+        form = CompareForm(request.POST)
+        if 'action' in request.POST:
+            action = request.POST['action']
+        else:
+            action = False
+        if form.is_valid():
+            crypto1 = None
+            crypto2 = None
+            if action == 'Compare':
+                crypto1 = form.cleaned_data["crypto1"]
+                crypto2 = form.cleaned_data["crypto2"]
+            allcrypto = get(
+                'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
+            if crypto1 and crypto2:
+                crypto1_overall = [x for x in allcrypto if crypto1.lower() in x['name'].lower()]
+                crypto2_overall = [x for x in allcrypto if crypto2.lower() in x['name'].lower()]
+                if crypto1_overall != [] and crypto2_overall != []:
+                    crypto1_overall = crypto1_overall[0]
+                    crypto2_overall = crypto2_overall[0]
+                    yd1 = get(
+                        'https://api.coingecko.com/api/v3/coins/%s/market_chart?vs_currency=usd&days=%d&interval=daily' % (
+                            crypto1_overall["id"], 30)).json()
+                    pricesy_1, datesy_1, day_1_y_1 = getgraphdata(30, crypto1, allcrypto, yd1)
+                    yd2 = get(
+                        'https://api.coingecko.com/api/v3/coins/%s/market_chart?vs_currency=usd&days=%d&interval=daily' % (
+                            crypto2_overall["id"], 30)).json()
+                    pricesy_2, datesy_2, day_1_y_2 = getgraphdata(30, crypto2, allcrypto, yd2)
+                    fig = Figure()
+                    fig.add_trace(
+                        Scatter(arg=dict(visible=True, name=crypto1_overall['name'], x=datesy_1, y=pricesy_1,
+                                         mode='markers+lines', opacity=0.8,
+                                         marker_color='blue')))
+                    fig.add_trace(
+                        Scatter(
+                            arg=dict(visible=True, name=crypto2_overall['name'], x=datesy_2, y=pricesy_2,
+                                     mode='markers+lines', opacity=0.8,
+                                     marker_color='red')))
+                    fig.update_layout(xaxis_title="Dates", yaxis_title="Value", width=1000, height=600)
+
+                    plot_div = plot(fig, output_type='div')
+                    return render(request, 'CryptoPeek/compare.html',
+                                  {"currency1": crypto1_overall, "currency2": crypto2_overall, "plot_div": plot_div,
+                                   "form": form})
+                return render(request, 'CryptoPeek/compare.html',
+                              {"currency1": False, "currency2": False, "form": form})
+        if action == 'Log out':
+            logout(request)
+            return redirect('/cryptopeek/compare/')
+        return render(request, 'CryptoPeek/compare.html', {"currency1": False, "currency2": False, "form": form})
+    else:
+        form = CompareForm()
+    return render(request, 'CryptoPeek/compare.html', {"currency1": False, "currency2": False, "form": form})
+
+
 def favourite(request):
     if request.user.is_authenticated:
         apidata = get(
@@ -74,7 +130,7 @@ def favourite(request):
                 logout(request)
                 return redirect('/cryptopeek/favourite/login/')
 
-            if action == "Wyszukaj":
+            if action == "Search":
                 apidata = get(
                     'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
                 if form.is_valid():
@@ -175,7 +231,7 @@ def index(request):
 
         if action == 'Log out':
             logout(request)
-        elif action == 'Wyszukaj':
+        elif action == 'Search':
             apidata = get(
                 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
 

@@ -59,3 +59,8 @@ class SignUpForm(UserCreationForm):
         super(SignUpForm, self).__init__(*args, **kwargs)
         for fieldname in ['username', 'password1', 'password2']:
             self.fields[fieldname].help_text = None
+
+
+class CompareForm(forms.Form):
+    crypto1 = forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder': 'Crypto to compare...'}))
+    crypto2 = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder': 'Crypto to compare...'}))
