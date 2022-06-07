@@ -91,14 +91,64 @@ def compare(request):
                     fig.add_trace(
                         Scatter(arg=dict(visible=True, name=crypto1_overall['name'], x=datesy_1, y=pricesy_1,
                                          mode='markers+lines', opacity=0.8,
-                                         marker_color='blue')))
+                                         marker_color='blue', yaxis="y")))
                     fig.add_trace(
                         Scatter(
                             arg=dict(visible=True, name=crypto2_overall['name'], x=datesy_2, y=pricesy_2,
                                      mode='markers+lines', opacity=0.8,
-                                     marker_color='red')))
-                    fig.update_layout(xaxis_title="Dates", yaxis_title="Value", width=1000, height=600)
+                                     marker_color='red', yaxis="y2")))
+                    fig.add_trace(
+                        Bar(arg=dict(visible=False, name=crypto1_overall['name'], x=datesy_1, y=pricesy_1,
+                                     opacity=0.8,
+                                     marker_color='blue', yaxis="y")))
+                    fig.add_trace(
+                        Bar(
+                            arg=dict(visible=False, name=crypto2_overall['name'], x=datesy_2, y=pricesy_2,
+                                     opacity=0.8,
+                                     marker_color='red', yaxis="y2")))
 
+                    fig.update_layout(xaxis_title="Dates", width=1000, height=600,
+                                      title="Last month's price change comparison",
+                                      yaxis=dict(title=crypto1_overall['name'], titlefont=dict(color="blue"),
+                                                 tickfont=dict(color="blue")),
+                                      yaxis2=dict(title=crypto2_overall['name'], titlefont=dict(color="red"),
+                                                  tickfont=dict(color="red"), anchor="x", automargin=True,
+                                                  overlaying="y",
+                                                  side="right"),
+                                      updatemenus=[layout.Updatemenu(
+                                          active=0,
+                                          buttons=[dict(label="Compare",
+                                                        method='update',
+                                                        args=[{'visible': [True, True, False, False]},
+                                                              {"yaxis.visible": True, "yaxis2.visible": True,
+                                                               'title': "Last month's price change comparison",
+                                                               "yaxis2.side": "right", "yaxis.autorange": True,
+                                                               "yaxis2.autorange": True}]),
+                                                   dict(label=crypto1_overall['name'],
+                                                        method='update',
+                                                        args=[{'visible': [False, False, True, False]},
+                                                              {"yaxis.visible": True, "yaxis2.visible": False,
+                                                               'title': crypto1_overall['name'],
+                                                               "yaxis2.side": "right",
+                                                               "yaxis.range": [min(pricesy_1) - (0.01 * min(pricesy_1)),
+                                                                               max(pricesy_1) + (
+                                                                                           0.01 * min(pricesy_1))],
+                                                               "yaxis2.range": [
+                                                                   min(pricesy_2) - (0.01 * min(pricesy_2)),
+                                                                   max(pricesy_2) + (0.01 * min(pricesy_2))]}]),
+                                                   dict(label=crypto2_overall['name'],
+                                                        method='update',
+                                                        args=[{'visible': [False, False, False, True]},
+                                                              {"yaxis.visible": False, "yaxis2.visible": True,
+                                                               'title': crypto1_overall['name'],
+                                                               "yaxis2.side": "left",
+                                                               "yaxis.range": [min(pricesy_1) - (0.01 * min(pricesy_1)),
+                                                                               max(pricesy_1) + (
+                                                                                           0.01 * min(pricesy_1))],
+                                                               "yaxis2.range": [
+                                                                   min(pricesy_2) - (0.01 * min(pricesy_2)),
+                                                                   max(pricesy_2) + (0.01 * min(pricesy_2))]}])
+                                                   ])])
                     plot_div = plot(fig, output_type='div')
                     return render(request, 'CryptoPeek/compare.html',
                                   {"currency1": crypto1_overall, "currency2": crypto2_overall, "plot_div": plot_div,

@@ -3,17 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ae714dde-cdaa-4bf0-8402-3d3369ff9d14" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/account.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/account.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/currencies.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/currencies.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/favourite.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/favourite.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/templatetags/CryptoPeek_tags.py" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templatetags/CryptoPeek_tags.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CryptoPeek/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CryptoPeek/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -187,7 +177,13 @@
       <workItem from="1653663403247" duration="656000" />
       <workItem from="1653678927145" duration="1570000" />
       <workItem from="1654001428498" duration="656000" />
-      <workItem from="1654337215134" duration="11043000" />
+      <workItem from="1654337215134" duration="11125000" />
+      <workItem from="1654358853222" duration="15406000" />
+      <workItem from="1654423694877" duration="43000" />
+      <workItem from="1654430519291" duration="138000" />
+      <workItem from="1654431942193" duration="190000" />
+      <workItem from="1654443601307" duration="2280000" />
+      <workItem from="1654591960886" duration="166000" />
     </task>
     <servers />
   </component>
