@@ -3,7 +3,7 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="{% static '/CryptoPeek/cssdetails2.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static '/CryptoPeek/details.css' %}">
 <nav class="navbar">
     <a id="curr" href="{% url 'CryptoPeek:home' %}"><div class="logo">CryptoPeek</div></a>
     <div class="options">
@@ -32,18 +32,15 @@
     <div class="actions">
         <form action='' method="POST">
             {% csrf_token %}
-            {% if not liked %}
+            {% if not liked_status %}
                 <input class='fav' type="submit" name="like" value="🤍">
             {% else %}
                 <input class='fav' type="submit" name="like" value="❤️">
             {% endif %}
         </form>
-{#            <a id="link" href="{% url 'CryptoPeek:following' crypto_id=apidata.id following=liked %}">#}
-{#                <div class="fav" >❤️</div>#}
-{#            </a>#}
         <a id="link" href="{% url 'CryptoPeek:currencies' %}"><div class="return">Return to currencies</div></a>
     </div>
-    <div class="name">{{ apidata.name }}</div>
+    <div class="name">{{ curr_crypto.name }}</div>
     <div class="valueinfo">
         <div class="image">
             {% autoescape off %}
@@ -51,8 +48,8 @@
             {% endautoescape %}
         </div>
         <div class="valuetable">
-            {% for crypto in apidataall %}
-                {% if crypto.id == apidata.id %}
+            {% for crypto in all_crypto %}
+                {% if crypto.id == curr_crypto.id %}
                     <div class="numberstop" id="currprice">Current price: {{ crypto.current_price}} USD</div>
                     <div class="numbers" id="pricechange24h">Price change(24h): {{ crypto.price_change_24h }} USD ({{ crypto.price_change_percentage_24h }}%)</div>
                     <div class="numbers" id="marketcap">Market cap: {{ crypto.market_cap }}</div>
@@ -64,5 +61,5 @@
             {% endfor %}
         </div>
     </div>
-    <div class="description"><div class="header">All about {{ apidata.name }}</div>{{apidata.description.en}}</div>
+    <div class="description"><div class="header">All about {{ curr_crypto.name }}</div>{{curr_crypto.description.en}}</div>
 </div>

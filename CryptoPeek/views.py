@@ -8,10 +8,62 @@ from requests import get
 import pymongo
 from .forms import CryptoListForm, SignUpForm, SignInForm, CompareForm
 
-connection_string = 'mongodb+srv://dgrzesik:cryptopeekdgrzesik@cluster0.r6kad.mongodb.net/CryptoPeek?retryWrites=true&w=majority'
-my_client = pymongo.MongoClient(connection_string)
+connectionLink = 'mongodb+srv://dgrzesik:cryptopeekdgrzesik@cluster0.r6kad.mongodb.net/CryptoPeek?retryWrites=true&w=majority'
+my_client = pymongo.MongoClient(connectionLink)
 dbname = my_client['CryptoPeek']
-all_favourites = dbname['User_Favourites']
+user_favourites = dbname['User_Favourites']
+
+
+def filter_data(name, input_dict, from_price, to_price, sort_type):
+    if from_price:
+        input_dict = [x for x in input_dict if x['current_price'] >= from_price]
+    if to_price:
+        input_dict = [x for x in input_dict if to_price >= x['current_price']]
+    if name:
+        input_dict = [x for x in input_dict if name.lower() in x['name'].lower()]
+    if sort_type == "A-Z":
+        input_dict.sort(key=lambda x: x["id"])
+    if sort_type == "Z-A":
+        input_dict.sort(key=lambda x: x["id"], reverse=True)
+    if sort_type == "ArrowDown":
+        input_dict.sort(key=lambda x: x["current_price"], reverse=True)
+    if sort_type == "ArrowUp":
+        input_dict.sort(key=lambda x: x["current_price"])
+    if sort_type == "ArrowUpMC":
+        input_dict.sort(key=lambda x: x["market_cap"])
+    if sort_type == "ArrowDownMC":
+        input_dict.sort(key=lambda x: x["market_cap"], reverse=True)
+    if sort_type == "ArrowUpPC":
+        input_dict.sort(key=lambda x: x["price_change_24h"])
+    if sort_type == "ArrowDownPC":
+        input_dict.sort(key=lambda x: x["price_change_24h"], reverse=True)
+    return input_dict
+
+
+def getgraphdata(days, crypto_id, all_crypto, graphdata):
+    prices = []
+    dates = []
+    curr_date = datetime.datetime.now() - datetime.timedelta(days)
+    first_date = curr_date
+    for crypto in all_crypto:
+        if crypto["id"] == crypto_id:
+            crypto["circulating_supply"] = int(crypto["circulating_supply"])
+    if days == 1:
+        for value in graphdata["prices"]:
+            prices.append(value[1])
+            dates.append(curr_date)
+            curr_date = curr_date + datetime.timedelta(1 / 24)
+    elif days == 365:
+        for value in graphdata["prices"]:
+            prices.append(value[1])
+            dates.append(curr_date)
+            curr_date = curr_date + datetime.timedelta(1)
+    else:
+        for value in graphdata["prices"]:
+            prices.append(value[1])
+            dates.append(curr_date)
+            curr_date = curr_date + datetime.timedelta(1)
+    return prices, dates, first_date
 
 
 def register(request):
@@ -25,7 +77,7 @@ def register(request):
                 password = form.cleaned_data['password1']
                 user = authenticate(username=user.username, password=password)
                 login(request, user)
-                all_favourites.insert_one({"username": user.username, "favourites": []})
+                user_favourites.insert_one({"username": user.username, "favourites": []})
                 return redirect('/cryptopeek/currencies/')
     else:
         form = SignUpForm()
@@ -54,7 +106,7 @@ def account(request):
 
 
 def delete(request, crypto_id):
-    all_favourites.update_one({'username': request.user.username}, {"$pull": {'favourites': crypto_id}})
+    user_favourites.update_one({'username': request.user.username}, {"$pull": {'favourites': crypto_id}})
     return redirect('/cryptopeek/favourite')
 
 
@@ -71,47 +123,49 @@ def compare(request):
             if action == 'Compare':
                 crypto1 = form.cleaned_data["crypto1"]
                 crypto2 = form.cleaned_data["crypto2"]
-            allcrypto = get(
+            all_crypto = get(
                 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
             if crypto1 and crypto2:
-                crypto1_overall = [x for x in allcrypto if crypto1.lower() in x['name'].lower()]
-                crypto2_overall = [x for x in allcrypto if crypto2.lower() in x['name'].lower()]
-                if crypto1_overall != [] and crypto2_overall != []:
-                    crypto1_overall = crypto1_overall[0]
-                    crypto2_overall = crypto2_overall[0]
-                    yd1 = get(
+                about_crypto1 = [x for x in all_crypto if crypto1.lower() in x['name'].lower()]
+                about_crypto2 = [x for x in all_crypto if crypto2.lower() in x['name'].lower()]
+                if about_crypto1 != [] and about_crypto2 != []:
+                    about_crypto1 = about_crypto1[0]
+                    about_crypto2 = about_crypto2[0]
+                    month_data_crypto1 = get(
                         'https://api.coingecko.com/api/v3/coins/%s/market_chart?vs_currency=usd&days=%d&interval=daily' % (
-                            crypto1_overall["id"], 30)).json()
-                    pricesy_1, datesy_1, day_1_y_1 = getgraphdata(30, crypto1, allcrypto, yd1)
-                    yd2 = get(
+                            about_crypto1["id"], 30)).json()
+                    prices_crypto1, dates_crypto1, dates_day1_crypto1 = getgraphdata(30, crypto1, all_crypto,
+                                                                                     month_data_crypto1)
+                    month_data_crypto2 = get(
                         'https://api.coingecko.com/api/v3/coins/%s/market_chart?vs_currency=usd&days=%d&interval=daily' % (
-                            crypto2_overall["id"], 30)).json()
-                    pricesy_2, datesy_2, day_1_y_2 = getgraphdata(30, crypto2, allcrypto, yd2)
+                            about_crypto2["id"], 30)).json()
+                    prices_crypto2, dates_crypto2, dates_day1_crypto2 = getgraphdata(30, crypto2, all_crypto,
+                                                                                     month_data_crypto2)
                     fig = Figure()
                     fig.add_trace(
-                        Scatter(arg=dict(visible=True, name=crypto1_overall['name'], x=datesy_1, y=pricesy_1,
+                        Scatter(arg=dict(visible=True, name=about_crypto1['name'], x=dates_crypto1, y=prices_crypto1,
                                          mode='markers+lines', opacity=0.8,
                                          marker_color='blue', yaxis="y")))
                     fig.add_trace(
                         Scatter(
-                            arg=dict(visible=True, name=crypto2_overall['name'], x=datesy_2, y=pricesy_2,
+                            arg=dict(visible=True, name=about_crypto2['name'], x=dates_crypto2, y=prices_crypto2,
                                      mode='markers+lines', opacity=0.8,
                                      marker_color='red', yaxis="y2")))
                     fig.add_trace(
-                        Bar(arg=dict(visible=False, name=crypto1_overall['name'], x=datesy_1, y=pricesy_1,
+                        Bar(arg=dict(visible=False, name=about_crypto1['name'], x=dates_crypto1, y=prices_crypto1,
                                      opacity=0.8,
                                      marker_color='blue', yaxis="y")))
                     fig.add_trace(
                         Bar(
-                            arg=dict(visible=False, name=crypto2_overall['name'], x=datesy_2, y=pricesy_2,
+                            arg=dict(visible=False, name=about_crypto2['name'], x=dates_crypto2, y=prices_crypto2,
                                      opacity=0.8,
                                      marker_color='red', yaxis="y2")))
 
-                    fig.update_layout(xaxis_title="Dates", width=1000, height=600,
+                    fig.update_layout(xaxis_title="Dates", width=1100, height=600,
                                       title="Last month's price change comparison",
-                                      yaxis=dict(title=crypto1_overall['name'], titlefont=dict(color="blue"),
+                                      yaxis=dict(title=about_crypto1['name'], titlefont=dict(color="blue"),
                                                  tickfont=dict(color="blue")),
-                                      yaxis2=dict(title=crypto2_overall['name'], titlefont=dict(color="red"),
+                                      yaxis2=dict(title=about_crypto2['name'], titlefont=dict(color="red"),
                                                   tickfont=dict(color="red"), anchor="x", automargin=True,
                                                   overlaying="y",
                                                   side="right"),
@@ -124,34 +178,38 @@ def compare(request):
                                                                'title': "Last month's price change comparison",
                                                                "yaxis2.side": "right", "yaxis.autorange": True,
                                                                "yaxis2.autorange": True}]),
-                                                   dict(label=crypto1_overall['name'],
+                                                   dict(label=about_crypto1['name'],
                                                         method='update',
                                                         args=[{'visible': [False, False, True, False]},
                                                               {"yaxis.visible": True, "yaxis2.visible": False,
-                                                               'title': crypto1_overall['name'],
+                                                               'title': about_crypto1['name'],
                                                                "yaxis2.side": "right",
-                                                               "yaxis.range": [min(pricesy_1) - (0.01 * min(pricesy_1)),
-                                                                               max(pricesy_1) + (
-                                                                                           0.01 * min(pricesy_1))],
+                                                               "yaxis.range": [
+                                                                   min(prices_crypto1) - (0.01 * min(prices_crypto1)),
+                                                                   max(prices_crypto1) + (
+                                                                           0.01 * min(prices_crypto1))],
                                                                "yaxis2.range": [
-                                                                   min(pricesy_2) - (0.01 * min(pricesy_2)),
-                                                                   max(pricesy_2) + (0.01 * min(pricesy_2))]}]),
-                                                   dict(label=crypto2_overall['name'],
+                                                                   min(prices_crypto2) - (0.01 * min(prices_crypto2)),
+                                                                   max(prices_crypto2) + (
+                                                                           0.01 * min(prices_crypto2))]}]),
+                                                   dict(label=about_crypto2['name'],
                                                         method='update',
                                                         args=[{'visible': [False, False, False, True]},
                                                               {"yaxis.visible": False, "yaxis2.visible": True,
-                                                               'title': crypto1_overall['name'],
+                                                               'title': about_crypto2['name'],
                                                                "yaxis2.side": "left",
-                                                               "yaxis.range": [min(pricesy_1) - (0.01 * min(pricesy_1)),
-                                                                               max(pricesy_1) + (
-                                                                                           0.01 * min(pricesy_1))],
+                                                               "yaxis.range": [
+                                                                   min(prices_crypto1) - (0.01 * min(prices_crypto1)),
+                                                                   max(prices_crypto1) + (
+                                                                           0.01 * min(prices_crypto1))],
                                                                "yaxis2.range": [
-                                                                   min(pricesy_2) - (0.01 * min(pricesy_2)),
-                                                                   max(pricesy_2) + (0.01 * min(pricesy_2))]}])
+                                                                   min(prices_crypto2) - (0.01 * min(prices_crypto2)),
+                                                                   max(prices_crypto2) + (
+                                                                           0.01 * min(prices_crypto2))]}])
                                                    ])])
                     plot_div = plot(fig, output_type='div')
                     return render(request, 'CryptoPeek/compare.html',
-                                  {"currency1": crypto1_overall, "currency2": crypto2_overall, "plot_div": plot_div,
+                                  {"currency1": about_crypto1, "currency2": about_crypto2, "plot_div": plot_div,
                                    "form": form})
                 return render(request, 'CryptoPeek/compare.html',
                               {"currency1": False, "currency2": False, "form": form})
@@ -166,10 +224,10 @@ def compare(request):
 
 def favourite(request):
     if request.user.is_authenticated:
-        apidata = get(
+        all_crypto = get(
             'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
-        this_users_fav = all_favourites.find_one({'username': request.user.username})['favourites']
-        apidata = [x for x in apidata if x['id'] in this_users_fav]
+        current_user_fav = user_favourites.find_one({'username': request.user.username})['favourites']
+        all_crypto = [x for x in all_crypto if x['id'] in current_user_fav]
         if request.method == 'POST':
             form = CryptoListForm(request.POST)
             if 'action' in request.POST:
@@ -181,44 +239,23 @@ def favourite(request):
                 return redirect('/cryptopeek/favourite/login/')
 
             if action == "Search":
-                apidata = get(
+                all_crypto = get(
                     'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
                 if form.is_valid():
                     name = form.cleaned_data['name']
                     from_price = form.cleaned_data['from_price']
                     to_price = form.cleaned_data['to_price']
                     sort_type = form.cleaned_data['sort']
-                    this_users_fav = all_favourites.find_one({'username': request.user.username})['favourites']
-                    apidata = [x for x in apidata if x['id'] in this_users_fav]
-                    input_dict = apidata
-                    if from_price:
-                        input_dict = [x for x in input_dict if x['current_price'] <= to_price]
-                    if to_price:
-                        input_dict = [x for x in input_dict if from_price <= x['current_price']]
-                    if name:
-                        input_dict = [x for x in input_dict if name.lower() in x['name'].lower()]
-                    if sort_type == "A-Z":
-                        input_dict.sort(key=lambda x: x["id"])
-                    if sort_type == "Z-A":
-                        input_dict.sort(key=lambda x: x["id"], reverse=True)
-                    if sort_type == "ArrowDown":
-                        input_dict.sort(key=lambda x: x["current_price"], reverse=True)
-                    if sort_type == "ArrowUp":
-                        input_dict.sort(key=lambda x: x["current_price"])
-                    if sort_type == "ArrowUpMC":
-                        input_dict.sort(key=lambda x: x["market_cap"])
-                    if sort_type == "ArrowDownMC":
-                        input_dict.sort(key=lambda x: x["market_cap"], reverse=True)
-                    if sort_type == "ArrowUpPC":
-                        input_dict.sort(key=lambda x: x["price_change_24h"])
-                    if sort_type == "ArrowDownPC":
-                        input_dict.sort(key=lambda x: x["price_change_24h"], reverse=True)
+                    this_users_fav = user_favourites.find_one({'username': request.user.username})['favourites']
+                    all_crypto = [x for x in all_crypto if x['id'] in this_users_fav]
+                    input_dict = all_crypto
+                    input_dict = filter_data(name, input_dict, from_price, to_price, sort_type)
 
-                    return render(request, 'CryptoPeek/favourite.html', {'apidata': input_dict, 'form': form})
+                    return render(request, 'CryptoPeek/favourite.html', {'all_crypto': input_dict, 'form': form})
 
         else:
             form = CryptoListForm()
-        return render(request, 'CryptoPeek/favourite.html', {'apidata': apidata, "form": form})
+        return render(request, 'CryptoPeek/favourite.html', {'all_crypto': all_crypto, "form": form})
     else:
         return redirect('/cryptopeek/favourite/login/')
 
@@ -228,49 +265,49 @@ def home(request):
         if request.POST['action'] == 'Log out':
             logout(request)
             return redirect('/cryptopeek/home/')
-    apidata = get(
+    all_crypto = get(
         'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
     highest_profit = -math.inf
     lowest_profit = math.inf
-    h_p_id = ""
-    l_p_id = ""
-    for crypto in apidata:
+    highest_profit_crypto_id = ""
+    lowest_profit_crypto_id = ""
+    for crypto in all_crypto:
         if crypto["price_change_percentage_24h"] > highest_profit:
             highest_profit = crypto["price_change_percentage_24h"]
-            h_p_id = crypto["id"]
+            highest_profit_crypto_id = crypto["id"]
         if crypto["price_change_percentage_24h"] < lowest_profit:
             lowest_profit = crypto["price_change_percentage_24h"]
-            l_p_id = crypto["id"]
-    highest_data = get('https://api.coingecko.com/api/v3/coins/%s' % h_p_id).json()
-    lowest_data = get('https://api.coingecko.com/api/v3/coins/%s' % l_p_id).json()
-    graphdata = get(
-        'https://api.coingecko.com/api/v3/coins/%s/market_chart?vs_currency=usd&days=1&interval=hourly' % h_p_id).json()
+            lowest_profit_crypto_id = crypto["id"]
+    highest_profit_data = get('https://api.coingecko.com/api/v3/coins/%s' % highest_profit_crypto_id).json()
+    lowest_profit_data = get('https://api.coingecko.com/api/v3/coins/%s' % lowest_profit_crypto_id).json()
+    highest_profit_graphdata = get(
+        'https://api.coingecko.com/api/v3/coins/%s/market_chart?vs_currency=usd&days=1&interval=hourly' % highest_profit_crypto_id).json()
 
-    graphdata2 = get(
-        'https://api.coingecko.com/api/v3/coins/%s/market_chart?vs_currency=usd&days=1&interval=hourly' % l_p_id).json()
+    lowest_profit_graphdata = get(
+        'https://api.coingecko.com/api/v3/coins/%s/market_chart?vs_currency=usd&days=1&interval=hourly' % lowest_profit_crypto_id).json()
 
-    pricesh, datesh, begin_h = getgraphdata(1, h_p_id, apidata, graphdata)
-    pricesl, datesl, begin_l = getgraphdata(1, l_p_id, apidata, graphdata2)
+    prices_highest_profit, dates_highest_profit, dates_day1_highest_profit = getgraphdata(1, highest_profit_crypto_id, all_crypto, highest_profit_graphdata)
+    prices_lowest_profit, dates_lowest_profit, dates_day1_lowest_profit = getgraphdata(1, lowest_profit_crypto_id, all_crypto, lowest_profit_graphdata)
     fig = Figure()
-    fig.add_trace(Scatter(arg=dict(x=datesh, y=pricesh,
+    fig.add_trace(Scatter(arg=dict(x=dates_highest_profit, y=prices_highest_profit,
                                    mode='markers+lines', name='crypto',
                                    opacity=0.8, marker_color='blue')))
 
     fig.update_layout(xaxis_title="Dates", yaxis_title="Value")
-    plot_div_h = plot(fig, output_type='div')
+    plot_div_highest_profit = plot(fig, output_type='div')
     fig2 = Figure()
-    fig2.add_trace(Scatter(arg=dict(x=datesl, y=pricesl,
+    fig2.add_trace(Scatter(arg=dict(x=dates_lowest_profit, y=prices_lowest_profit,
                                     mode='markers+lines', name='crypto',
                                     opacity=0.8, marker_color='red')))
     fig2.update_layout(xaxis_title="Dates", yaxis_title="Value", )
-    plot_div_l = plot(fig2, output_type='div')
+    plot_div_lowest_profit = plot(fig2, output_type='div')
     return render(request, 'CryptoPeek/home.html',
-                  {'apidata': apidata, 'highest_data': highest_data, 'lowest_data': lowest_data,
-                   'plot_div_h': plot_div_h, 'plot_div_l': plot_div_l})
+                  {'all_crypto': all_crypto, 'highest_profit_data': highest_profit_data, 'lowest_profit_data': lowest_profit_data,
+                   'plot_div_highest_profit': plot_div_highest_profit, 'plot_div_lowest_profit': plot_div_lowest_profit})
 
 
-def index(request):
-    apidata = get(
+def currencies(request):
+    all_crypto = get(
         'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
     if request.method == 'POST':
         form = CryptoListForm(request.POST)
@@ -282,7 +319,7 @@ def index(request):
         if action == 'Log out':
             logout(request)
         elif action == 'Search':
-            apidata = get(
+            all_crypto = get(
                 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
 
             if form.is_valid():
@@ -290,96 +327,48 @@ def index(request):
                 from_price = form.cleaned_data['from_price']
                 to_price = form.cleaned_data['to_price']
                 sort_type = form.cleaned_data['sort']
-                input_dict = apidata
-                if from_price:
-                    input_dict = [x for x in input_dict if x['current_price'] >= from_price]
-                if to_price:
-                    input_dict = [x for x in input_dict if to_price >= x['current_price']]
-                if name:
-                    input_dict = [x for x in input_dict if name.lower() in x['name'].lower()]
-                if sort_type == "A-Z":
-                    input_dict.sort(key=lambda x: x["id"])
-                if sort_type == "Z-A":
-                    input_dict.sort(key=lambda x: x["id"], reverse=True)
-                if sort_type == "ArrowDown":
-                    input_dict.sort(key=lambda x: x["current_price"], reverse=True)
-                if sort_type == "ArrowUp":
-                    input_dict.sort(key=lambda x: x["current_price"])
-                if sort_type == "ArrowUpMC":
-                    input_dict.sort(key=lambda x: x["market_cap"])
-                if sort_type == "ArrowDownMC":
-                    input_dict.sort(key=lambda x: x["market_cap"], reverse=True)
-                if sort_type == "ArrowUpPC":
-                    input_dict.sort(key=lambda x: x["price_change_24h"])
-                if sort_type == "ArrowDownPC":
-                    input_dict.sort(key=lambda x: x["price_change_24h"], reverse=True)
-
-                return render(request, 'CryptoPeek/currencies.html', {'apidata': input_dict, 'form': form})
+                input_dict = all_crypto
+                input_dict = filter_data(name,input_dict,from_price,to_price,sort_type)
+                return render(request, 'CryptoPeek/currencies.html', {'all_crypto': input_dict, 'form': form})
 
     else:
         form = CryptoListForm()
-    return render(request, 'CryptoPeek/currencies.html', {'apidata': apidata, "form": form})
-
-
-def getgraphdata(days, crypto_id, apidataall, graphdata):
-    prices = []
-    dates = []
-    curr_date = datetime.datetime.now() - datetime.timedelta(days)
-    first_date = curr_date
-    for crypto in apidataall:
-        if crypto["id"] == crypto_id:
-            crypto["circulating_supply"] = int(crypto["circulating_supply"])
-    if days == 1:
-        for value in graphdata["prices"]:
-            prices.append(value[1])
-            dates.append(curr_date)
-            curr_date = curr_date + datetime.timedelta(1 / 24)
-    elif days == 365:
-        for value in graphdata["prices"]:
-            prices.append(value[1])
-            dates.append(curr_date)
-            curr_date = curr_date + datetime.timedelta(1)
-    else:
-        for value in graphdata["prices"]:
-            prices.append(value[1])
-            dates.append(curr_date)
-            curr_date = curr_date + datetime.timedelta(1)
-    return prices, dates, first_date
+    return render(request, 'CryptoPeek/currencies.html', {'all_crypto': all_crypto, "form": form})
 
 
 def detail(request, crypto_id):
-    apidataall = get(
+    all_crypto = get(
         'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false').json()
-    apidata = get('https://api.coingecko.com/api/v3/coins/%s' % crypto_id).json()
-    daysd = 1
-    daysw = 7
-    daysm = 31
-    daysy = 365
+    curr_crypto = get('https://api.coingecko.com/api/v3/coins/%s' % crypto_id).json()
+    day = 1
+    week = 7
+    month = 31
+    year = 365
 
-    dd = get(
+    day_data = get(
         'https://api.coingecko.com/api/v3/coins/%s/market_chart?vs_currency=usd&days=%d&interval=hourly' % (
-            crypto_id, daysd)).json()
-    wd = get(
+            crypto_id, day)).json()
+    week_data = get(
         'https://api.coingecko.com/api/v3/coins/%s/market_chart?vs_currency=usd&days=%d&interval=daily' % (
-            crypto_id, daysw)).json()
-    md = get(
+            crypto_id, week)).json()
+    month_data = get(
         'https://api.coingecko.com/api/v3/coins/%s/market_chart?vs_currency=usd&days=%d&interval=daily' % (
-            crypto_id, daysm)).json()
-    yd = get(
+            crypto_id, month)).json()
+    year_data = get(
         'https://api.coingecko.com/api/v3/coins/%s/market_chart?vs_currency=usd&days=%d&interval=daily' % (
-            crypto_id, daysy)).json()
-    pricesd, datesd, day_1_d = getgraphdata(daysd, crypto_id, apidataall, dd)
-    pricesw, datesw, day_1_w = getgraphdata(daysw, crypto_id, apidataall, wd)
-    pricesm, datesm, day_1_m = getgraphdata(daysm, crypto_id, apidataall, md)
-    pricesy, datesy, day_1_y = getgraphdata(daysy, crypto_id, apidataall, yd)
+            crypto_id, year)).json()
+    day_prices, dates_day, day_day1 = getgraphdata(day, crypto_id, all_crypto, day_data)
+    week_prices, dates_week, week_day1 = getgraphdata(week, crypto_id, all_crypto, week_data)
+    month_prices, dates_month, month_day1 = getgraphdata(month, crypto_id, all_crypto, month_data)
+    year_prices, dates_year, year_day1 = getgraphdata(year, crypto_id, all_crypto, year_data)
     fig = Figure()
-    fig.add_trace(Scatter(arg=dict(visible=True, name='Day', x=datesd, y=pricesd, mode='markers+lines', opacity=0.8,
+    fig.add_trace(Scatter(arg=dict(visible=True, name='Day', x=dates_day, y=day_prices, mode='markers+lines', opacity=0.8,
                                    marker_color='blue')))
-    fig.add_trace(Scatter(arg=dict(visible=False, name='Week', x=datesw, y=pricesw, mode='markers+lines', opacity=0.8,
+    fig.add_trace(Scatter(arg=dict(visible=False, name='Week', x=dates_week, y=week_prices, mode='markers+lines', opacity=0.8,
                                    marker_color='orange')))
-    fig.add_trace(Scatter(arg=dict(visible=False, name='Month', x=datesm, y=pricesm, mode='markers+lines', opacity=0.8,
+    fig.add_trace(Scatter(arg=dict(visible=False, name='Month', x=dates_month, y=month_prices, mode='markers+lines', opacity=0.8,
                                    marker_color='green')))
-    fig.add_trace(Scatter(arg=dict(visible=False, name='Year', x=datesy, y=pricesy, mode='markers+lines', opacity=0.8,
+    fig.add_trace(Scatter(arg=dict(visible=False, name='Year', x=dates_year, y=year_prices, mode='markers+lines', opacity=0.8,
                                    marker_color='purple')))
     fig.update_layout(xaxis_title="Dates", yaxis_title="Value", title=datetime.datetime.now().strftime("%m/%d/%y"),
                       updatemenus=[layout.Updatemenu(
@@ -392,15 +381,15 @@ def detail(request, crypto_id):
                                          {'title': datetime.datetime.now().strftime("%m/%d/%y")}]),
                               dict(label='Week',
                                    method='update',
-                                   args=[{'visible': [False, True, False, False]}, {'title': day_1_w.strftime(
+                                   args=[{'visible': [False, True, False, False]}, {'title': week_day1.strftime(
                                        "%m/%d/%y") + ' - ' + datetime.datetime.now().strftime("%m/%d/%y")}]),
                               dict(label='Month',
                                    method='update',
-                                   args=[{'visible': [False, False, True, False]}, {'title': day_1_m.strftime(
+                                   args=[{'visible': [False, False, True, False]}, {'title': month_day1.strftime(
                                        "%m/%d/%y") + ' - ' + datetime.datetime.now().strftime("%m/%d/%y")}]),
                               dict(label='Year',
                                    method='update',
-                                   args=[{'visible': [False, False, False, True]}, {'title': day_1_y.strftime(
+                                   args=[{'visible': [False, False, False, True]}, {'title': year_day1.strftime(
                                        "%m/%d/%y") + ' - ' + datetime.datetime.now().strftime("%m/%d/%y")}]),
                           ]
                       )
@@ -408,11 +397,11 @@ def detail(request, crypto_id):
                       )
 
     plot_div = plot(fig, output_type='div')
-    liked = 0
+    liked_status = 0
     if request.user.is_authenticated:
-        this_users_fav = all_favourites.find_one({'username': request.user.username})['favourites']
+        this_users_fav = user_favourites.find_one({'username': request.user.username})['favourites']
         if crypto_id in this_users_fav:
-            liked = 1
+            liked_status = 1
         if request.method == 'POST':
             if 'action' in request.POST:
                 action = request.POST['action']
@@ -423,17 +412,17 @@ def detail(request, crypto_id):
             else:
                 like = False
             if like == '🤍':
-                all_favourites.update_one({'username': request.user.username}, {"$push": {'favourites': crypto_id}})
-                liked = 1
+                user_favourites.update_one({'username': request.user.username}, {"$push": {'favourites': crypto_id}})
+                liked_status = 1
             if like == "❤️":
-                all_favourites.update_one({'username': request.user.username}, {"$pull": {'favourites': crypto_id}})
-                liked = 0
+                user_favourites.update_one({'username': request.user.username}, {"$pull": {'favourites': crypto_id}})
+                liked_status = 0
             if action == 'Log out':
                 logout(request)
                 return render(request, 'CryptoPeek/details.html',
-                              {'apidata': apidata, 'plot_div': plot_div, 'apidataall': apidataall, "liked": 0})
+                              {'curr_crypto': curr_crypto, 'plot_div': plot_div, 'all_crypto': all_crypto, "liked_status": 0})
     else:
         if request.method == 'POST':
             return redirect('/cryptopeek/login/')
     return render(request, 'CryptoPeek/details.html',
-                  {'apidata': apidata, 'plot_div': plot_div, 'apidataall': apidataall, "liked": liked})
+                  {'curr_crypto': curr_crypto, 'plot_div': plot_div, 'all_crypto': all_crypto, "liked_status": liked_status})

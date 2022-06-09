@@ -10,6 +10,6 @@ urlpatterns = [
     path('cryptopeek/login/',views.account,name="account"),
     path('cryptopeek/delete/<str:crypto_id>/',views.delete,name="delete"),
     path('cryptopeek/register/',views.register,name="register"),
-    path('cryptopeek/currencies/', views.index, name='currencies'),
+    path('cryptopeek/currencies/', views.currencies, name='currencies'),
     path('cryptopeek/<str:crypto_id>/', views.detail, name='detail')
 ]

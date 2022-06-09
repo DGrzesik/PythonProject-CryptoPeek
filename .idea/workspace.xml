@@ -3,7 +3,24 @@
   <component name="ChangeListManager">
     <list default="true" id="ae714dde-cdaa-4bf0-8402-3d3369ff9d14" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/account1.css" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/account.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/compare1.css" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/compare.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/cssdetails2.css" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/details.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/currenciesstyle2.css" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/currencies.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/favouritestyle3.css" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/favourite.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/home2.css" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/home.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/account.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/account.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/compare.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/compare.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/currencies.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/currencies.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/favourite.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/favourite.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/templatetags/CryptoPeek_tags.py" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/templatetags/CryptoPeek_tags.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CryptoPeek/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CryptoPeek/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CryptoPeek/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,8 +47,8 @@
     <setting file="file://$PROJECT_DIR$/DjangoCrypto/urls.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/CryptoPeek/views.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/CryptoPeek/urls.py" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/cssdetails2.css" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/home2.css" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/details.css" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CryptoPeek/static/CryptoPeek/home.css" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/CryptoPeek/templates/CryptoPeek/home.html" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/CryptoPeek/tests.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/CryptoPeek/models.py" root0="FORCE_HIGHLIGHTING" />
@@ -46,7 +63,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Semestr4/bazy/UpdatedDBPortProject/DB-PROJECT" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Semestr4/python/doubttestfiles" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -184,6 +201,7 @@
       <workItem from="1654431942193" duration="190000" />
       <workItem from="1654443601307" duration="2280000" />
       <workItem from="1654591960886" duration="166000" />
+      <workItem from="1654774229403" duration="4969000" />
     </task>
     <servers />
   </component>

@@ -17,9 +17,12 @@ sort_types = (
 
 
 class CryptoListForm(forms.Form):
-    name = forms.CharField(label="Name:",widget=forms.TextInput(attrs={'placeholder': 'Search by name...'}), required=False)
-    from_price = forms.FloatField(label='Beginning price:',widget=forms.TextInput(attrs={'placeholder': 'Lowest value...'}), required=False)
-    to_price = forms.FloatField(label="Highest price:",widget=forms.TextInput(attrs={'placeholder': 'Highest value...'}), required=False)
+    name = forms.CharField(label="Name:", widget=forms.TextInput(attrs={'placeholder': 'Search by name...'}),
+                           required=False)
+    from_price = forms.FloatField(label='Beginning price:',
+                                  widget=forms.TextInput(attrs={'placeholder': 'Lowest value...'}), required=False)
+    to_price = forms.FloatField(label="Highest price:",
+                                widget=forms.TextInput(attrs={'placeholder': 'Highest value...'}), required=False)
     sort = forms.ChoiceField(label="Sort:", choices=sort_types, required=False)
 
 
@@ -28,9 +31,10 @@ class GraphForm(forms.Form):
                                 required=False)
     date_to = forms.DateField(widget=forms.TextInput(attrs={'placeholder': 'Ending date(rrrr-mm-dd)'}), required=False)
 
+
 class SignInForm(forms.Form):
-    username=forms.CharField(label="Username:")
-    password=forms.CharField(label="Password:",widget=forms.PasswordInput)
+    username = forms.CharField(label="Username:")
+    password = forms.CharField(label="Password:", widget=forms.PasswordInput)
 
     def clean(self):
         username = self.cleaned_data.get('username')
@@ -48,12 +52,13 @@ class SignInForm(forms.Form):
 
 
 class SignUpForm(UserCreationForm):
-    first_name=forms.CharField(label='Name:')
-    last_name=forms.CharField(label="Surname:")
-    email=forms.EmailField(label="Email:")
+    first_name = forms.CharField(label='Name:')
+    last_name = forms.CharField(label="Surname:")
+    email = forms.EmailField(label="Email:")
+
     class Meta:
         model = User
-        fields = ('username','first_name','last_name','email', 'password1', 'password2')
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
 
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
@@ -62,5 +67,5 @@ class SignUpForm(UserCreationForm):
 
 
 class CompareForm(forms.Form):
-    crypto1 = forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder': 'Crypto to compare...'}))
+    crypto1 = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder': 'Crypto to compare...'}))
     crypto2 = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder': 'Crypto to compare...'}))

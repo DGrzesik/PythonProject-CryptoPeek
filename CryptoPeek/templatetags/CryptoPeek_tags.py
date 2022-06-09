@@ -11,8 +11,8 @@ def round_large_values(value):
         value /= 1000.0
     return '%.2f%s' % (value, ['', 'K', 'M', 'B'][magnitude])
 
+
 @register.filter("round_small_values")
 def round_small_values(value):
-    value=round(value,8)
+    value = round(value, 8)
     return value
-

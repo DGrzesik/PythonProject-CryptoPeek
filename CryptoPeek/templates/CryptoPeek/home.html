@@ -4,7 +4,7 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="{% static '/CryptoPeek/home2.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static '/CryptoPeek/home.css' %}">
 <div class="navbar">
     <a id="curr" href="{% url 'CryptoPeek:home' %}"><div class="logo">CryptoPeek</div></a>
     <div class="options">
@@ -35,19 +35,19 @@
         </div>
     </div>
        <div class="top">
-           <a id="link" href="{% url 'CryptoPeek:detail' highest_data.id %}">
-               {% for crypto in apidata %}
-                   {% if crypto.id == highest_data.id %}
+           <a id="link" href="{% url 'CryptoPeek:detail' highest_profit_data.id %}">
+               {% for crypto in all_crypto %}
+                   {% if crypto.id == highest_profit_data.id %}
                        <div class="name">
-                       <div class="nohoveron">Highest profit in last 24h: {{ highest_data.name }} ({{crypto.price_change_percentage_24h}}%)</div>
-                        <div class="hoveron">Dowiedz się więcej!</div>
+                       <div class="nohoveron">Highest profit in last 24h: {{ highest_profit_data.name }} ({{crypto.price_change_percentage_24h}}%)</div>
+                        <div class="hoveron">Learn more!</div>
                        </div>
                    {% endif %}
                {% endfor %}
            </a>
            <div class="graph">
                 {% autoescape off %}
-                    {{ plot_div_h }}
+                    {{ plot_div_highest_profit }}
                 {% endautoescape %}
            </div>
        </div>
@@ -59,19 +59,19 @@
         </div>
     </div>
        <div class="top">
-       <a id="link" href="{% url 'CryptoPeek:detail' lowest_data.id %}">
-           {% for crypto in apidata %}
-               {% if crypto.id == lowest_data.id %}
+       <a id="link" href="{% url 'CryptoPeek:detail' lowest_profit_data.id %}">
+           {% for crypto in all_crypto %}
+               {% if crypto.id == lowest_profit_data.id %}
                     <div class="name">
-                        <div class="nohoveron">Lowest profit in last 24h: {{ lowest_data.name }} ({{crypto.price_change_percentage_24h}}%)</div>
-                        <div class="hoveron">Dowiedz się więcej!</div>
+                        <div class="nohoveron">Lowest profit in last 24h: {{ lowest_profit_data.name }} ({{crypto.price_change_percentage_24h}}%)</div>
+                        <div class="hoveron">Learn more!</div>
                     </div>
                {% endif %}
            {% endfor %}
        </a>
                 <div class="graph">
                 {% autoescape off %}
-                    {{ plot_div_l }}
+                    {{ plot_div_lowest_profit }}
                 {% endautoescape %}</div>
        </div>
 </div>
